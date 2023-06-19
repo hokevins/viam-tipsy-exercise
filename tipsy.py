@@ -73,7 +73,7 @@ async def main():
     sensors = initialize_sensors(robot)
     detector = VisionClient.from_robot(robot, "myPeopleDetector")
 
-    # Create two background tasks running asynchronously:
+    # Create background tasks running asynchronously:
 
     # Background task that looks for obstacles and stops Tipsy if its moving
     obstacle_task = asyncio.create_task(obstacle_detect_loop(base, *sensors))

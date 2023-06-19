@@ -27,7 +27,7 @@ Are you tired of constantly making trips to the fridge during a party just to re
 1. As Tipsy, I can detect the presence of obstacles in my surrounding area, so I can avoid them using my ultrasonic sensor distance measurement(s).
 2. As Tipsy, I can stop in the presence of obstacles, so I can avoid collisions.
 3. As Tipsy, I can move backwards and reorient myself, so I can self-heal getting stuck and/or tipping backwards in the event of a collision. If an object is not in the field of detection for the ultrasonic sensor(s) and an impact occurs, I can use my IMU (inertial measurement unit) sensor for orientation detection.
-4. As Tipsy, I can detect the presence of people in my surrounding area, so I can move towards them with ease using my camera and machine learning model.
+4. As Tipsy, I can detect the presence of people in my surrounding area, so I can move towards them using my camera and machine learning model.
 5. As Tipsy, I can pause once I am near a person, so that my guests can grab a drink within arm's reach.
 6. As Tipsy, I can mingle randomly in the space, so that my guests are continually refreshed without ever having to leave their spot.
 
