@@ -20,6 +20,8 @@ Are you tired of constantly making trips to the fridge during a party just to re
 * Tipsy's software consists of the [viam-server](https://docs.viam.com/installation/#install-viam-server), and the [Viam Python SDK](https://python.viam.dev/).
 * You will also need access to the [Viam App](https://app.viam.com/robots) for robot configuration and setup.
 
+---
+
 ### Robot Stories
 
 1. As Tipsy, I can detect the presence of obstacles in my surrounding area, so I can avoid them using my ultrasonic sensor distance measurement(s).
@@ -29,12 +31,12 @@ Are you tired of constantly making trips to the fridge during a party just to re
 5. As Tipsy, I can pause once I am near a person, so that my guests can grab a drink within arm's reach.
 6. As Tipsy, I can mingle randomly in the space, so that my guests are continually refreshed without ever having to leave their spot.
 
-#### Additional Project Requirements
+### Additional Project Requirements
 
 1. When using found code from our resources below, please focus on uplifting the code in any way you see fit.
 2. Make the number of ultrasonic sensors configurable, e.g. allow one to have a config variable that says it should use X number of ultrasonic sensors.
 
-#### Additional Project Guidelines
+### Additional Project Guidelines
 
 1. Since you don’t have the hardware to test, we don’t expect this to be working code! Note that the Viam rovers in the Try experience don’t have an ultrasonic sensor, so you will not be able to test your code there either.
 2. Don't over-engineer the robot mingling feature. Randomness is okay, so there's no need to track individual people or where Tipsy has been. The only requirement is for Tipsy to not get stuck next to the same person.
