@@ -4,7 +4,7 @@ Made by [Kevin Ho](https://www.linkedin.com/in/hokevins), for the candidacy of t
 
 _Thank you for your time in reviewing my project._
 
-### Kevin's Future Ideas for Project Expansion
+### Kevin's Ideas for Future Project Expansion
 
 * Integrate a speech provider, like ElevenLabs, to provide Tipsy with a VUI (vocal user interface) for more seamless human interactions.
 * Integrate a VSLAM navigation algorithm, similar to that of Roomba, to help Tipsy mingle more effectively in the space.
