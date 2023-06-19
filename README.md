@@ -1,5 +1,3 @@
-# viam-tipsy-exercise
-
 ## Welcome to Viam's `Tipsy` project!
 
 Made by Kevin Ho, for the candidacy of the _Senior Developer Advocate_ role at **Viam** on 06/23/2023.
@@ -16,4 +14,4 @@ Are you tired of constantly making trips to the fridge during a party just to re
 
 more to come...
 
-![](public/images/tipsy.jpeg)
+![](public/images/tipsy.jpeg | width=250)
