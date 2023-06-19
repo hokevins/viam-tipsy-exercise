@@ -52,13 +52,13 @@ async def person_detect_loop(base, detector, *sensors):
             if checked_person_distance:
                 print("Tipsy moving forward.")
                 BASE_STATE = BaseState.FORWARD
-                # To move towards a person, Tipsy will always move forward 800mm at 800mm/s
+                # To move towards a person, Tipsy will always move forward 800mm at 250mm/s
                 await base.move_straight(distance=800, velocity=250)
                 BASE_STATE = BaseState.STOPPED
         else:
             print("Tipsy spinning.")
             BASE_STATE = BaseState.SPINNING
-            # To find a person, Tipsy will always randomly spin at 45deg/s
+            # To find a person, Tipsy will always spin randomly at 45deg/s
             await base.spin(random.randrange(360), 45)
             BASE_STATE = BaseState.STOPPED
 
@@ -89,10 +89,10 @@ async def main():
     """
     TODO:
     - Split into classes?
-    - if person is extremely close, stop Tipsy
-    - Stay for x time for people to pick up drinks
-    - This includes both not starting movement that will create a collision, but also stopping movement when something unexpectedly enters Tipsy’s path
+    - if base stopped, start counting time, if 30seconds have elapsed, spin randomly
+    - if ever the base is != stopped, reset timer to 0
     - if Tipsy is stopped for too long it will turn randomly by X degrees
+    - do IMU sensor task
     - write tests or numpy docs?
     - read Viam tutorial docs and Python asyncio docs
     """
