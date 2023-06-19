@@ -22,3 +22,14 @@ PAUSE_INTERVAL = os.getenv("PAUSE_INTERVAL") or 3
 # Change this value if you'd like to adjust the number of Tipsy's ultrasonic sensors
 # Defaults to 1 sensor
 NUMBER_OF_ULTRASONIC_SENSORS = os.getenv("NUMBER_OF_ULTRASONIC_SENSORS") or 1
+
+class BaseState:
+    """Dataclass to represent the states of the robot's base"""
+    BACKWARD = "backward"
+    FORWARD = "forward"
+    SPINNING = "spinning"
+    STOPPED = "stopped"
+
+class Label:
+    """Dataclass to represent the assigned labels of the ML model"""
+    PERSON = "Person"

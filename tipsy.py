@@ -10,18 +10,18 @@ import random
 from viam.components.base import Base
 from viam.services.vision import VisionClient
 
-from utils.constants import BASE_NAME, CAMERA_NAME, PAUSE_INTERVAL
+from utils.constants import BASE_NAME, CAMERA_NAME, PAUSE_INTERVAL, BaseState, Label
 from utils.lib import connect, detect_obstacles_greater_than, detect_obstacles_less_than, initialize_sensors
 
 
-base_state = "stopped"
+BASE_STATE = BaseState.STOPPED
 
 async def obstacle_detect_loop(base, *sensors):
     """Obstacle detection loop"""
     while(True):
         # If an obstacle is less than 0.6m away and currently moving straight, stop Tipsy
         checked_obstacles_distance = await detect_obstacles_less_than(sensors, threshold=0.6)
-        if checked_obstacles_distance and base_state == "straight":
+        if checked_obstacles_distance and BASE_STATE == BaseState.FORWARD:
             await base.stop()
             print("Obstacle detected. Awaiting...")
         await asyncio.sleep(.01)
@@ -30,7 +30,7 @@ async def person_detect_loop(base, detector, *sensors):
     """Person detection loop"""
     while(True):
         found_person = False
-        global base_state
+        global BASE_STATE
         print("Detecting person...")
         detections = await detector.get_detections_from_camera(CAMERA_NAME)
         for d in detections:
@@ -38,7 +38,7 @@ async def person_detect_loop(base, detector, *sensors):
                 # Matching a 0.7 confidence of the assigned labels from labels.txt
                 detected_object = d.class_name
                 # Check specifically for detections with the label `Person` and not every object in the `labels.txt` file
-                if detected_object != "Person":
+                if detected_object != Label.PERSON:
                     print(f"{detected_object} detected. Not a person.")
                 else:
                     found_person = True
@@ -51,16 +51,16 @@ async def person_detect_loop(base, detector, *sensors):
             # If a person is more than 0.6m away, start Tipsy
             if checked_person_distance:
                 print("Tipsy moving straight.")
-                base_state = "straight"
+                BASE_STATE = BaseState.FORWARD
                 # To move towards a person, Tipsy will always move forward 800mm at 800mm/s
                 await base.move_straight(distance=800, velocity=250)
-                base_state = "stopped"
+                BASE_STATE = BaseState.STOPPED
         else:
             print("Tipsy spinning.")
-            base_state = "spinning"
+            BASE_STATE = BaseState.SPINNING
             # To find a person, Tipsy will always randomly spin at 45deg/s
             await base.spin(random.randrange(360), 45)
-            base_state = "stopped"
+            BASE_STATE = BaseState.STOPPED
 
         await asyncio.sleep(PAUSE_INTERVAL)
 
@@ -93,7 +93,6 @@ async def main():
     - Stay for x time for people to pick up drinks
     - if Tipsy is stopped for too long it will turn randomly by X degrees
     - write tests or numpy docs?
-    - refactor `base_state` into a DataClass?
     - read Viam tutorial docs and Python asyncio docs
     """
 
