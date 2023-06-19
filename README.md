@@ -1,6 +1,6 @@
 ## Welcome to Viam's `Tipsy` project!
 
-Made by [Kevin Ho](https://www.linkedin.com/in/hokevins), for the candidacy of the _Senior Developer Advocate_ role at **Viam** on 06/23/2023.
+Made by [Kevin Ho](https://www.linkedin.com/in/hokevins), for the candidacy of the **Senior Developer Advocate role at Viam** on 06/23/2023.
 
 _Thank you for your time in reviewing my project._
 
