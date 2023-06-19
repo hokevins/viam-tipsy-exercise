@@ -56,4 +56,4 @@ print(result["distance"])
 * [Tutorial - Use Object Detection to Turn Your Lights On](https://docs.viam.com/tutorials/projects/light-up/): uses a ML model to detect people
 * [Tutorial - Drive the Viam Rover with the Viam SDK](https://docs.viam.com/tutorials/get-started/try-viam-sdk/): shows how to programmatically drive a robotic base
 
-<img src="public/images/tipsy.jpeg" width="250">
+<img src="tipsy.jpeg" width="250">
