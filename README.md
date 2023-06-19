@@ -11,6 +11,8 @@ _Thank you for your time in reviewing my project._
 * Integrate a weight sensor, to help Tipsy know when to replenish its own supply of drinks in the kitchen.
 * Integrate a vision service, to help Tipsy recognize when it's being hailed by a guest.
 
+---
+
 ## Project Specs from Matt Vella, Head of Developer Relations of Viam
 
 Are you tired of constantly making trips to the fridge during a party just to replenish everyone's drinks? Are your guests tired of going to grab their own drinks? Well, now everyone can sit back and relax while Tipsy takes care of all your beer carrying needs.
@@ -19,8 +21,6 @@ Are you tired of constantly making trips to the fridge during a party just to re
 * Tipsy's hardware consists of a motorized wheeled base e.g. a [Scuttle rover](https://www.scuttlerobot.org/product/scuttle-v3), a [Raspberry Pi](https://a.co/d/bxEdcAT), a webcam, an IMU sensor, and one or more [ultrasonic sensors](https://www.amazon.com/WWZMDiB-HC-SR04-Ultrasonic-Distance-Measuring/dp/B0B1MJJLJP/ref=sr_1_4).
 * Tipsy's software consists of the [viam-server](https://docs.viam.com/installation/#install-viam-server), and the [Viam Python SDK](https://python.viam.dev/).
 * You will also need access to the [Viam App](https://app.viam.com/robots) for robot configuration and setup.
-
----
 
 ### Robot Stories
 
