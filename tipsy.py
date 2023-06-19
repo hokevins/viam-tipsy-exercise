@@ -19,8 +19,8 @@ BASE_STATE = BaseState.STOPPED
 async def obstacle_detect_loop(base, *sensors):
     """Obstacle detection loop"""
     while(True):
-        # If an obstacle is less than 0.6m away and currently moving straight, stop Tipsy
         checked_obstacles_distance = await detect_obstacles_less_than(sensors, threshold=0.6)
+        # If an obstacle is less than 0.6m away and currently moving forward, stop Tipsy
         if checked_obstacles_distance and BASE_STATE == BaseState.FORWARD:
             await base.stop()
             print("Obstacle detected. Awaiting...")
@@ -50,7 +50,7 @@ async def person_detect_loop(base, detector, *sensors):
             checked_person_distance = await detect_obstacles_greater_than(sensors, threshold=0.6)
             # If a person is more than 0.6m away, start Tipsy
             if checked_person_distance:
-                print("Tipsy moving straight.")
+                print("Tipsy moving forward.")
                 BASE_STATE = BaseState.FORWARD
                 # To move towards a person, Tipsy will always move forward 800mm at 800mm/s
                 await base.move_straight(distance=800, velocity=250)
@@ -91,6 +91,7 @@ async def main():
     - Split into classes?
     - if person is extremely close, stop Tipsy
     - Stay for x time for people to pick up drinks
+    - This includes both not starting movement that will create a collision, but also stopping movement when something unexpectedly enters Tipsy’s path
     - if Tipsy is stopped for too long it will turn randomly by X degrees
     - write tests or numpy docs?
     - read Viam tutorial docs and Python asyncio docs
