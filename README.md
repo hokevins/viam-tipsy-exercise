@@ -14,4 +14,4 @@ Are you tired of constantly making trips to the fridge during a party just to re
 
 more to come...
 
-![](public/images/tipsy.jpeg | width=250)
+<img src="public/images/tipsy.jpeg" width="250">
