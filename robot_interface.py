@@ -46,7 +46,8 @@ class RobotInterface:
         self.TIME_LAST_STOPPED = datetime.now()
 
     async def stop(self):
-        """Locomotion method to stop Tipsy"""
+        """Locomotion method to stop Tipsy in the event of an obstacle"""
         print("Tipsy stopping.")
-        # Intentionally do not update `TIME_LAST_STOPPED`
         await self.base.stop())
+        self.BASE_STATE = BaseState.STOPPED
+        # Intentionally do not update `TIME_LAST_STOPPED` so that Tipsy will mingle
