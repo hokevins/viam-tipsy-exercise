@@ -79,7 +79,7 @@ async def stopped_detect_loop(robot_interface):
         await asyncio.sleep(0.01)
 
 async def main():
-    """Main Tipsy runner"""
+    """Main coroutine that creates and runs several subtasks in parallel"""
 
     robot = await connect()
     base = Base.from_robot(robot, BASE_NAME)
@@ -89,18 +89,19 @@ async def main():
 
     robot_interface = RobotInterface(base)
 
-    # Create background tasks running asynchronously:
+    # Schedule coroutines to run asynchronously
+    tasks = [
+        # Background task that looks for obstacles
+        asyncio.create_task(obstacle_detect_loop(robot_interface, *ultrasonic_sensors)),
+        # Background task that monitors orientation
+        asyncio.create_task(orientation_detect_loop(robot_interface, movement_sensor)),
+        # Background task that looks for a person
+        asyncio.create_task(person_detect_loop(robot_interface, detector, *ultrasonic_sensors)),
+        # Background task that tracks how long it's been since base was last stopped
+        asyncio.create_task(stopped_detect_loop(robot_interface))
+    ]
 
-    # Background task that looks for obstacles
-    obstacle_task = asyncio.create_task(obstacle_detect_loop(robot_interface, *ultrasonic_sensors))
-    # Background task that monitors orientation
-    orientation_task = asyncio.create_task(orientation_detect_loop(robot_interface, movement_sensor))
-    # Background task that looks for a person
-    person_task = asyncio.create_task(person_detect_loop(robot_interface, detector, *ultrasonic_sensors))
-    # Background task that tracks how long it's been since base was last stopped
-    spin_task = asyncio.create_task(stopped_detect_loop(robot_interface))
-
-    results = await asyncio.gather(obstacle_task, orientation_task, person_task, spin_task, return_exceptions=True)
+    results = await asyncio.gather(*tasks, return_exceptions=True)
     print(results)
 
     await robot.close()
