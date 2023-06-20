@@ -18,7 +18,7 @@ _Thank you for your time in reviewing my project._
 Are you tired of constantly making trips to the fridge during a party just to replenish everyone's drinks? Are your guests tired of going to grab their own drinks? Well, now everyone can sit back and relax while Tipsy takes care of all your beer carrying needs.
 
 * Let's create an autonomous drink carrying robot. Tipsy makes it easy to replenish everyone’s drinks at a party.
-* Tipsy's hardware consists of a [Scuttle rover](https://www.scuttlerobot.org/product/scuttle-v3) as a motorized wheeled base, a [Raspberry Pi](https://a.co/d/bxEdcAT), a webcam, an IMU sensor, and one or more [ultrasonic sensors](https://www.amazon.com/WWZMDiB-HC-SR04-Ultrasonic-Distance-Measuring/dp/B0B1MJJLJP/ref=sr_1_4).
+* Tipsy's hardware consists of a [Scuttle rover](https://www.scuttlerobot.org/product/scuttle-v3) as a motorized wheeled base, a [Raspberry Pi](https://a.co/d/bxEdcAT), a webcam, an [IMU sensor](https://witmotion-sensor.com/), and one or more [ultrasonic sensors](https://www.amazon.com/WWZMDiB-HC-SR04-Ultrasonic-Distance-Measuring/dp/B0B1MJJLJP/ref=sr_1_4).
 * Tipsy's software consists of the [viam-server](https://docs.viam.com/installation/#install-viam-server) and the [Viam Python SDK](https://python.viam.dev/).
 * You will also need access to the [Viam App](https://app.viam.com/robots) for robot configuration and setup.
 

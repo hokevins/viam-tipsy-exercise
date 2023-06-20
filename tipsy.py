@@ -114,7 +114,7 @@ async def main():
     TODO:
     - Split into classes?
     - do IMU sensor task
-    - write tests or numpy docs?
+    - write tests or numpy docstrings for Sphinx generated docs?
     - read Viam tutorial docs and Python asyncio docs
     """
 
