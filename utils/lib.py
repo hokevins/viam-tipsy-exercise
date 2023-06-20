@@ -1,5 +1,5 @@
 """
-Copyright: Copyright (C) 2023 Viam - All Rights Reserved
+Copyright: Copyright (C) 2023 Kevin Ho | Viam - All Rights Reserved
 Product: DevRel
 Description: A demonstration of the Viam Python SDK with Tipsy.
 """
