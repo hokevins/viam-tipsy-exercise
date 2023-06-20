@@ -43,6 +43,6 @@ async def detect_obstacles_less_than(sensors, threshold=0.4):
 def initialize_ultrasonic_sensors(robot):
     """Initialize all ultrasonic sensors and return as a list of sensors"""
     sensors = []
-    for n in range(1, NUMBER_OF_ULTRASONIC_SENSORS + 1):
+    for n in range(1, int(NUMBER_OF_ULTRASONIC_SENSORS) + 1):
         sensors.append(Sensor.from_robot(robot, f"ultrasonic_sensor{n}"))
     return sensors

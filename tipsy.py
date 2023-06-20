@@ -12,7 +12,7 @@ from viam.components.movement_sensor import MovementSensor
 from viam.services.vision import VisionClient
 
 from robot_interface import RobotInterface
-from utils.constants import BASE_NAME, CAMERA_NAME, PAUSE_INTERVAL, BaseState, Label
+from utils.constants import BASE_NAME, CAMERA_NAME, ML_CONFIDENCE_THRESHOLD, PAUSE_INTERVAL, BaseState, Label
 from utils.lib import connect, detect_obstacles_greater_than, detect_obstacles_less_than, initialize_ultrasonic_sensors
 
 
@@ -47,10 +47,8 @@ async def person_detect_loop(robot_interface, detector, *sensors):
         print("Detecting person...")
         detections = await detector.get_detections_from_camera(CAMERA_NAME)
         for d in detections:
-            # Matching a 0.7 confidence of the assigned labels from `labels.txt`
-            if d.confidence > 0.7:
+            if d.confidence > float(ML_CONFIDENCE_THRESHOLD):
                 detected_object = d.class_name
-                # Check specifically for detections with the label `Person` and not every object in the `labels.txt` file
                 if detected_object != Label.PERSON:
                     print(f"{detected_object} detected. Not a person.")
                 else:
@@ -65,7 +63,7 @@ async def person_detect_loop(robot_interface, detector, *sensors):
         else:
             await robot_interface.spin_randomly()
 
-        await asyncio.sleep(PAUSE_INTERVAL)
+        await asyncio.sleep(float(PAUSE_INTERVAL))
 
 async def stopped_detect_loop(robot_interface):
     """Stopped tracker loop for mingle mechanism"""
