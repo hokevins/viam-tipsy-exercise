@@ -72,7 +72,7 @@ async def orientation_detect_loop(base, sensor):
             # TODO: Fix pseudocode above with known API to calculate orientation?
             # Docs: https://docs.viam.com/components/movement-sensor/#getorientation
             print("Collision possibly detected.")
-            _move_backward_and_turn_around(base)
+            await _move_backward_and_turn_around(base)
 
         await asyncio.sleep(0.01)
 
@@ -97,9 +97,9 @@ async def person_detect_loop(base, detector, *sensors):
             checked_person_distance = await detect_obstacles_greater_than(sensors, threshold=0.6)
             # If any person is more than 0.6m away, then start moving
             if checked_person_distance:
-                _move_forward(base)
+                await _move_forward(base)
         else:
-            _spin_randomly(base)
+            await _spin_randomly(base)
 
         await asyncio.sleep(PAUSE_INTERVAL)
 
@@ -110,7 +110,7 @@ async def stopped_detect_loop(base):
         # If it's been longer than 30s since base was last stopped, then spin randomly
         if elapsed_time > 30:
             print(f"It's been {elapsed_time} seconds since Tipsy last moved.")
-            _spin_randomly(base)
+            await _spin_randomly(base)
 
         await asyncio.sleep(0.01)
 
