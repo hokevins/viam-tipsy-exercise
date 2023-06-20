@@ -117,7 +117,6 @@ async def stopped_detect_loop(base):
 async def main():
     """Main Tipsy runner"""
 
-    # Initialize robot, base, ultrasonic sensor(s), and detector
     robot = await connect()
     base = Base.from_robot(robot, BASE_NAME)
     detector = VisionClient.from_robot(robot, "person_detector")
@@ -138,14 +137,7 @@ async def main():
     results = await asyncio.gather(obstacle_task, orientation_task, person_task, spin_task, return_exceptions=True)
     print(results)
 
-    # Disconnect from Tipsy
     await robot.close()
-
-    """
-    TODOs:
-    - write tests or numpy docstrings for Sphinx generated docs?
-    - read Viam Tipsy tutorial doc and Python asyncio docs
-    """
 
 if __name__ == "__main__":
     asyncio.run(main())
