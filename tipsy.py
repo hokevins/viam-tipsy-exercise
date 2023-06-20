@@ -6,6 +6,7 @@ Description: A demonstration of the Viam Python SDK with Tipsy.
 
 import asyncio
 import random
+from datetime import datetime
 
 from viam.components.base import Base
 from viam.services.vision import VisionClient
@@ -15,6 +16,7 @@ from utils.lib import connect, detect_obstacles_greater_than, detect_obstacles_l
 
 
 BASE_STATE = BaseState.STOPPED
+TIME_LAST_STOPPED = datetime.now()
 
 async def obstacle_detect_loop(base, *sensors):
     """Obstacle detection loop"""
@@ -24,13 +26,15 @@ async def obstacle_detect_loop(base, *sensors):
         if checked_obstacles_distance and BASE_STATE == BaseState.FORWARD:
             await base.stop()
             print("Obstacle detected. Awaiting...")
-        await asyncio.sleep(.01)
+
+        await asyncio.sleep(0.01)
 
 async def person_detect_loop(base, detector, *sensors):
     """Person detection loop"""
     while(True):
         found_person = False
         global BASE_STATE
+        global TIME_LAST_STOPPED
         print("Detecting person...")
         detections = await detector.get_detections_from_camera(CAMERA_NAME)
         for d in detections:
@@ -55,14 +59,32 @@ async def person_detect_loop(base, detector, *sensors):
                 # To move towards a person, Tipsy will always move forward 800mm at 250mm/s
                 await base.move_straight(distance=800, velocity=250)
                 BASE_STATE = BaseState.STOPPED
+                TIME_LAST_STOPPED = datetime.now()
         else:
             print("Tipsy spinning.")
             BASE_STATE = BaseState.SPINNING
             # To find a person, Tipsy will always spin randomly at 45deg/s
             await base.spin(random.randrange(360), 45)
             BASE_STATE = BaseState.STOPPED
+            TIME_LAST_STOPPED = datetime.now()
 
         await asyncio.sleep(PAUSE_INTERVAL)
+
+async def stopped_detect_loop(base):
+    """Stopped tracker loop for mingle mechanism"""
+    while(True):
+        global BASE_STATE
+        global TIME_LAST_STOPPED
+        elapsed_time = (datetime.now() - TIME_LAST_STOPPED).total_seconds()
+        # Spin Tipsy randomly if it's been longer than 30s since base was last stopped
+        if elapsed_time > 30:
+            print(f"It's been {elapsed_time} seconds since Tipsy last moved. Tipsy spinning.")
+            BASE_STATE = BaseState.SPINNING
+            await base.spin(random.randrange(360), 45)
+            BASE_STATE = BaseState.STOPPED
+            TIME_LAST_STOPPED = datetime.now()
+
+        await asyncio.sleep(0.01)
 
 async def main():
     """Main Tipsy runner"""
@@ -79,8 +101,10 @@ async def main():
     obstacle_task = asyncio.create_task(obstacle_detect_loop(base, *sensors))
     # Background task that looks for a person and moves Tipsy towards them, or turns and keeps looking
     person_task = asyncio.create_task(person_detect_loop(base, detector, *sensors))
+    # Background task that tracks how long it's been since base was last stopped
+    spin_task = asyncio.create_task(stopped_detect_loop(base))
 
-    results = await asyncio.gather(obstacle_task, person_task, return_exceptions=True)
+    results = await asyncio.gather(obstacle_task, person_task, spin_task, return_exceptions=True)
     print(results)
 
     # Disconnect from Tipsy
@@ -89,9 +113,6 @@ async def main():
     """
     TODO:
     - Split into classes?
-    - if base stopped, start counting time, if 30seconds have elapsed, spin randomly
-    - if ever the base is != stopped, reset timer to 0
-    - if Tipsy is stopped for too long it will turn randomly by X degrees
     - do IMU sensor task
     - write tests or numpy docs?
     - read Viam tutorial docs and Python asyncio docs
