@@ -16,12 +16,15 @@ from utils.constants import BASE_NAME, CAMERA_NAME, PAUSE_INTERVAL, BaseState, L
 from utils.lib import connect, detect_obstacles_greater_than, detect_obstacles_less_than, initialize_ultrasonic_sensors
 
 
+# Robot state:
+
 BASE_STATE = BaseState.STOPPED
 TIME_LAST_STOPPED = datetime.now()
 
 # Locomotion methods:
 
 async def _move_backward_and_turn_around(base):
+    """Internal method to move Tipsy"""
     global BASE_STATE
     global TIME_LAST_STOPPED
     print("Tipsy moving backward and turning around.")
@@ -33,6 +36,7 @@ async def _move_backward_and_turn_around(base):
     TIME_LAST_STOPPED = datetime.now()
 
 async def _move_forward(base):
+    """Internal method to move Tipsy"""
     global BASE_STATE
     global TIME_LAST_STOPPED
     print("Tipsy moving forward.")
@@ -42,6 +46,7 @@ async def _move_forward(base):
     TIME_LAST_STOPPED = datetime.now()
 
 async def _spin_randomly(base):
+    """Internal method to move Tipsy"""
     global BASE_STATE
     global TIME_LAST_STOPPED
     print("Tipsy spinning.")
@@ -69,8 +74,8 @@ async def orientation_detect_loop(base, sensor):
         orientation = await sensor.get_orientation() # Get the current orientation vector
         # If Tipsy is tipping backwards in the event of a collision, then self-heal by moving backward and turning around
         if orientation is not level:
-            # TODO: Fix pseudocode above with known API to calculate orientation?
-            # Docs: https://docs.viam.com/components/movement-sensor/#getorientation
+            # TODO: Fix pseudocode above with correct API usage to calculate orientation
+            # Unclear how to achieve this from the [docs](https://docs.viam.com/components/movement-sensor/#getorientation)
             print("Collision possibly detected.")
             await _move_backward_and_turn_around(base)
 
@@ -107,7 +112,7 @@ async def stopped_detect_loop(base):
     """Stopped tracker loop for mingle mechanism"""
     while True:
         elapsed_time = (datetime.now() - TIME_LAST_STOPPED).total_seconds()
-        # If it's been longer than 30s since base was last stopped, then spin randomly
+        # If it's been longer than 30s since Tipsy last moved, then spin randomly
         if elapsed_time > 30:
             print(f"It's been {elapsed_time} seconds since Tipsy last moved.")
             await _spin_randomly(base)
