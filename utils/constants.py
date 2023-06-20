@@ -24,7 +24,7 @@ PAUSE_INTERVAL = os.getenv("PAUSE_INTERVAL") or 3
 NUMBER_OF_ULTRASONIC_SENSORS = os.getenv("NUMBER_OF_ULTRASONIC_SENSORS") or 1
 
 class BaseState:
-    """Dataclass to represent the states of the robot's base"""
+    """Dataclass to represent the states of Tipsy's base"""
     BACKWARD = "backward"
     FORWARD = "forward"
     SPINNING = "spinning"
