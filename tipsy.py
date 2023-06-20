@@ -9,10 +9,11 @@ import random
 from datetime import datetime
 
 from viam.components.base import Base
+from viam.components.movement_sensor import MovementSensor
 from viam.services.vision import VisionClient
 
 from utils.constants import BASE_NAME, CAMERA_NAME, PAUSE_INTERVAL, BaseState, Label
-from utils.lib import connect, detect_obstacles_greater_than, detect_obstacles_less_than, initialize_sensors
+from utils.lib import connect, detect_obstacles_greater_than, detect_obstacles_less_than, initialize_ultrasonic_sensors
 
 
 BASE_STATE = BaseState.STOPPED
@@ -86,34 +87,57 @@ async def stopped_detect_loop(base):
 
         await asyncio.sleep(0.01)
 
+async def orientation_detect_loop(base, sensor):
+    """Orientation detection loop"""
+    while True:
+        global BASE_STATE
+        global TIME_LAST_STOPPED
+        orientation = await sensor.get_orientation() # Get the current orientation vector
+        # If Tipsy is tipping backwards in the event of a collision, self-heal by moving backward and turning around
+        if orientation is not level:
+            # TODO: Fix pseudocode above with known API to calculate orientation
+            # Docs: https://docs.viam.com/components/movement-sensor/#getorientation
+            print(f"Collision possibly detected. Tipsy moving backward and turning around.")
+            BASE_STATE = BaseState.BACKWARD
+            await base.move_straight(distance=-800, velocity=100)
+            BASE_STATE = BaseState.SPINNING
+            await base.spin(180, 45)
+            BASE_STATE = BaseState.STOPPED
+            TIME_LAST_STOPPED = datetime.now()
+
+        await asyncio.sleep(0.01)
+
 async def main():
     """Main Tipsy runner"""
 
     # Initialize robot, base, ultrasonic sensor(s), and detector
     robot = await connect()
     base = Base.from_robot(robot, BASE_NAME)
-    sensors = initialize_sensors(robot)
-    detector = VisionClient.from_robot(robot, "myPeopleDetector")
+    detector = VisionClient.from_robot(robot, "person_detector")
+    movement_sensor = MovementSensor.from_robot(robot, "movement_sensor")
+    ultrasonic_sensors = initialize_ultrasonic_sensors(robot)
 
     # Create background tasks running asynchronously:
 
     # Background task that looks for obstacles and stops Tipsy if its moving
-    obstacle_task = asyncio.create_task(obstacle_detect_loop(base, *sensors))
+    obstacle_task = asyncio.create_task(obstacle_detect_loop(base, *ultrasonic_sensors))
     # Background task that looks for a person and moves Tipsy towards them, or turns and keeps looking
-    person_task = asyncio.create_task(person_detect_loop(base, detector, *sensors))
+    person_task = asyncio.create_task(person_detect_loop(base, detector, *ultrasonic_sensors))
     # Background task that tracks how long it's been since base was last stopped
     spin_task = asyncio.create_task(stopped_detect_loop(base))
+    # Background task that monitors orientation in the event of a collision
+    orientation_task = asyncio.create_task(orientation_detect_loop(base, movement_sensor))
 
-    results = await asyncio.gather(obstacle_task, person_task, spin_task, return_exceptions=True)
+    results = await asyncio.gather(obstacle_task, person_task, spin_task, orientation_task, return_exceptions=True)
     print(results)
 
     # Disconnect from Tipsy
     await robot.close()
 
     """
-    TODO:
+    TODOs:
     - Split into classes?
-    - do IMU sensor task
+    - make a helper spinning method, make a helper going forward method, make a helper going backward method
     - write tests or numpy docstrings for Sphinx generated docs?
     - read Viam tutorial docs and Python asyncio docs
     """
