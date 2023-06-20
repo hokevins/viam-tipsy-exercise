@@ -20,7 +20,7 @@ TIME_LAST_STOPPED = datetime.now()
 
 async def obstacle_detect_loop(base, *sensors):
     """Obstacle detection loop"""
-    while(True):
+    while True:
         checked_obstacles_distance = await detect_obstacles_less_than(sensors, threshold=0.6)
         # If an obstacle is less than 0.6m away and currently moving forward, stop Tipsy
         if checked_obstacles_distance and BASE_STATE == BaseState.FORWARD:
@@ -31,7 +31,7 @@ async def obstacle_detect_loop(base, *sensors):
 
 async def person_detect_loop(base, detector, *sensors):
     """Person detection loop"""
-    while(True):
+    while True:
         found_person = False
         global BASE_STATE
         global TIME_LAST_STOPPED
@@ -72,7 +72,7 @@ async def person_detect_loop(base, detector, *sensors):
 
 async def stopped_detect_loop(base):
     """Stopped tracker loop for mingle mechanism"""
-    while(True):
+    while True:
         global BASE_STATE
         global TIME_LAST_STOPPED
         elapsed_time = (datetime.now() - TIME_LAST_STOPPED).total_seconds()
