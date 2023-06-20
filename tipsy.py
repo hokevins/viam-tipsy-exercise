@@ -13,13 +13,13 @@ from viam.services.vision import VisionClient
 
 from robot_interface import RobotInterface
 from utils.constants import BASE_NAME, CAMERA_NAME, ML_CONFIDENCE_THRESHOLD, PAUSE_INTERVAL, BaseState, Label
-from utils.lib import connect, detect_obstacles_greater_than, detect_obstacles_less_than, initialize_ultrasonic_sensors
+from utils.lib import connect, detect_obstacles, initialize_ultrasonic_sensors
 
 
 async def obstacle_detect_loop(robot_interface, *sensors):
     """Obstacle detection loop"""
     while True:
-        checked_obstacles_distance = await detect_obstacles_less_than(sensors, threshold=0.6)
+        checked_obstacles_distance = await detect_obstacles(sensors, compare_operator="less", threshold=0.6)
         # If any obstacle is less than 0.6m away and Tipsy is currently moving forward, then stop moving
         if checked_obstacles_distance and robot_interface.BASE_STATE == BaseState.FORWARD:
             print("Obstacle detected. Awaiting...")
@@ -56,7 +56,7 @@ async def person_detect_loop(robot_interface, detector, *sensors):
 
         if found_person:
             print("Person detected! Maybe they'd like a drink?")
-            checked_person_distance = await detect_obstacles_greater_than(sensors, threshold=0.6)
+            checked_person_distance = await detect_obstacles(sensors, compare_operator="greater", threshold=0.6)
             # If any person is more than 0.6m away, then start moving
             if checked_person_distance:
                 await robot_interface.move_forward()

@@ -22,21 +22,15 @@ async def detect_obstacle_distance(sensor):
     """Get reading from an ultrasonic sensor and return distance in meters"""
     return await sensor.get_readings()["distance"]
 
-async def detect_obstacles_greater_than(sensors, threshold=0.4):
-    """Calculate if readings from a series of ultrasonic sensors are greater than a threshold in meters and return as a boolean"""
+async def detect_obstacles(sensors, compare_operator="greater", threshold=0.4):
+    """Calculate if readings from a series of ultrasonic sensors are greater/less than a threshold in meters and return as a boolean"""
     for sensor in sensors:
         distance = await detect_obstacle_distance(sensor)
-        if distance > threshold:
-            # Returns True if just one reading is greater
+        # If comparing with `greater`, then return True if any reading is greater
+        if compare_operator == "greater" and distance > threshold:
             return True
-    return False
-
-async def detect_obstacles_less_than(sensors, threshold=0.4):
-    """Calculate if readings from a series of ultrasonic sensors are less than a threshold in meters and return as a boolean"""
-    for sensor in sensors:
-        distance = await detect_obstacle_distance(sensor)
-        if distance < threshold:
-            # Returns True if just one reading is less
+        # If comparing with `less`, then return True if any reading is less
+        if compare_operator == "less" and distance < threshold:
             return True
     return False
 
