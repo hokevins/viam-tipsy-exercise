@@ -66,7 +66,7 @@ async def person_detect_loop(robot_interface, detector, *sensors):
 async def stopped_detect_loop(robot_interface):
     """Stopped tracker loop for mingle mechanism"""
     while True:
-        elapsed_time = (datetime.now() - TIME_LAST_STOPPED).total_seconds()
+        elapsed_time = (datetime.now() - robot_interface.TIME_LAST_STOPPED).total_seconds()
         # If it's been longer than 30s since Tipsy last moved, then spin randomly
         if elapsed_time > 30:
             print(f"It's been {elapsed_time} seconds since Tipsy last moved.")
