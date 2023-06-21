@@ -30,11 +30,9 @@ async def obstacle_detect_loop(robot_interface, *sensors):
 async def orientation_detect_loop(robot_interface, sensor):
     """Orientation detection loop"""
     while True:
-        orientation = await sensor.get_orientation() # Get the current orientation vector
-        # If Tipsy is tipping backwards in the event of a collision, then self-heal by moving backward and turning around
-        if orientation is not level:
-            # TODO: Fix pseudocode above with correct API usage to calculate orientation
-            # Unclear how to achieve this from the [docs](https://docs.viam.com/components/movement-sensor/#getorientation)
+        orientation = await sensor.get_orientation()
+        # If Tipsy is tipping backwards in the possible event of a collision, then self-heal by moving backward and turning around
+        if orientation.o_z > 0: # Positive z means Tipsy is pointing up
             print("Collision possibly detected.")
             await robot_interface.move_backward_and_turn_around()
 
