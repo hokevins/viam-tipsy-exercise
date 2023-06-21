@@ -53,6 +53,6 @@ print(result["distance"])
 * Integrate a weight sensor, to help Tipsy know when to replenish its own supply of drinks in the kitchen.
 * Integrate a vision service, to help Tipsy recognize when it's being hailed by a guest.
 
-#### Project specs adapted from instructions provided by Matt Vella, Head of Developer Relations of Viam
+#### _Project specs adapted from instructions provided by Matt Vella, Head of Developer Relations of Viam._
 
 <img src="tipsy.jpeg" width="250">
